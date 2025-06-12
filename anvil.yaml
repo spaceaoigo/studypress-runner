@@ -1,13 +1,23 @@
-allow_embedding: false
-name: StudyPress-Runner
-package_name: StudyPress_Runner
+# Anvil App Configuration
+# このファイルで、AnvilにDjangoアプリの動かし方を教える
+
+# サーバーサイドのコード（Django）の設定
+server_module:
+  # Pythonのバージョンを指定
+  python_version: "3.10"
+
+# フロントエンド（AnvilのUI）の設定
+# 今回はDjangoのテンプレートを使うので、client_dependenciesは空
+client_dependencies: {}
+
+# アプリの起動時に実行するコマンド
+startup:
+  # データベースのマイグレーションを実行
+  - command: "python3.10 manage.py migrate"
+  # Webサーバーを起動
+  - command: "gunicorn mysite.wsgi:application --bind 0.0.0.0:$PORT"
+
+# 必要なライブラリ
 runtime_options:
-  client_version: '3'
-  server_spec: {base: python310-minimal}
-  server_version: python3-sandbox
-  version: 2
-services:
-- client_config: {}
-  server_config: {}
-  source: /runtime/services/tables.yml
-startup_form: Form1
+  # requirements.txtを読み込んでインストール
+  requirements_file: "requirements.txt"
